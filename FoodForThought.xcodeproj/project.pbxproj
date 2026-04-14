@@ -6,17 +6,24 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		576AA9C52F8E720900DBFC97 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 576AA9BF2F8E720900DBFC97 /* Assets.xcassets */; };
+		576AA9CB2F8E729B00DBFC97 /* SavedRecipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576AA9CA2F8E729B00DBFC97 /* SavedRecipe.swift */; };
+		576AA9CD2F8E72A200DBFC97 /* MealDBNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576AA9CC2F8E72A200DBFC97 /* MealDBNetworkService.swift */; };
+		576AA9CF2F8E72A600DBFC97 /* DiscoverViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576AA9CE2F8E72A600DBFC97 /* DiscoverViewModel.swift */; };
+		576AA9D12F8E72AB00DBFC97 /* MainContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576AA9D02F8E72AB00DBFC97 /* MainContentView.swift */; };
+		576AA9D32F8E72C100DBFC97 /* FoodForThoughtApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576AA9D22F8E72C100DBFC97 /* FoodForThoughtApp.swift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		576AA9B12F8E718900DBFC97 /* FoodForThought.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FoodForThought.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		576AA9BF2F8E720900DBFC97 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		576AA9CA2F8E729B00DBFC97 /* SavedRecipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedRecipe.swift; sourceTree = "<group>"; };
+		576AA9CC2F8E72A200DBFC97 /* MealDBNetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealDBNetworkService.swift; sourceTree = "<group>"; };
+		576AA9CE2F8E72A600DBFC97 /* DiscoverViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiscoverViewModel.swift; sourceTree = "<group>"; };
+		576AA9D02F8E72AB00DBFC97 /* MainContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainContentView.swift; sourceTree = "<group>"; };
+		576AA9D22F8E72C100DBFC97 /* FoodForThoughtApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoodForThoughtApp.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		576AA9B32F8E718900DBFC97 /* FoodForThought */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = FoodForThought;
-			sourceTree = "<group>";
-		};
-/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		576AA9AE2F8E718900DBFC97 /* Frameworks */ = {
@@ -32,7 +39,7 @@
 		576AA9A82F8E718900DBFC97 = {
 			isa = PBXGroup;
 			children = (
-				576AA9B32F8E718900DBFC97 /* FoodForThought */,
+				576AA9C22F8E720900DBFC97 /* FoodForThought */,
 				576AA9B22F8E718900DBFC97 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -43,6 +50,51 @@
 				576AA9B12F8E718900DBFC97 /* FoodForThought.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		576AA9C22F8E720900DBFC97 /* FoodForThought */ = {
+			isa = PBXGroup;
+			children = (
+				576AA9D22F8E72C100DBFC97 /* FoodForThoughtApp.swift */,
+				576AA9C62F8E720B00DBFC97 /* Models */,
+				576AA9C92F8E722400DBFC97 /* Services */,
+				576AA9C72F8E721500DBFC97 /* ViewModels */,
+				576AA9C82F8E722000DBFC97 /* Views */,
+				576AA9BF2F8E720900DBFC97 /* Assets.xcassets */,
+			);
+			path = FoodForThought;
+			sourceTree = "<group>";
+		};
+		576AA9C62F8E720B00DBFC97 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				576AA9CA2F8E729B00DBFC97 /* SavedRecipe.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		576AA9C72F8E721500DBFC97 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				576AA9CE2F8E72A600DBFC97 /* DiscoverViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		576AA9C82F8E722000DBFC97 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				576AA9D02F8E72AB00DBFC97 /* MainContentView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		576AA9C92F8E722400DBFC97 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				576AA9CC2F8E72A200DBFC97 /* MealDBNetworkService.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -59,9 +111,6 @@
 			buildRules = (
 			);
 			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				576AA9B32F8E718900DBFC97 /* FoodForThought */,
 			);
 			name = FoodForThought;
 			packageProductDependencies = (
@@ -109,6 +158,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				576AA9C52F8E720900DBFC97 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -119,6 +169,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				576AA9CD2F8E72A200DBFC97 /* MealDBNetworkService.swift in Sources */,
+				576AA9CF2F8E72A600DBFC97 /* DiscoverViewModel.swift in Sources */,
+				576AA9D32F8E72C100DBFC97 /* FoodForThoughtApp.swift in Sources */,
+				576AA9CB2F8E729B00DBFC97 /* SavedRecipe.swift in Sources */,
+				576AA9D12F8E72AB00DBFC97 /* MainContentView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -256,7 +311,17 @@
 				DEVELOPMENT_TEAM = 97ZWL58HD9;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_INCOMING_NETWORK_CONNECTIONS = NO;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
+				ENABLE_RESOURCE_ACCESS_BLUETOOTH = NO;
+				ENABLE_RESOURCE_ACCESS_CALENDARS = NO;
+				ENABLE_RESOURCE_ACCESS_CAMERA = NO;
+				ENABLE_RESOURCE_ACCESS_CONTACTS = NO;
+				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
+				ENABLE_RESOURCE_ACCESS_PRINTING = NO;
+				ENABLE_RESOURCE_ACCESS_USB = NO;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
@@ -288,7 +353,17 @@
 				DEVELOPMENT_TEAM = 97ZWL58HD9;
 				ENABLE_APP_SANDBOX = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_INCOMING_NETWORK_CONNECTIONS = NO;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
+				ENABLE_RESOURCE_ACCESS_BLUETOOTH = NO;
+				ENABLE_RESOURCE_ACCESS_CALENDARS = NO;
+				ENABLE_RESOURCE_ACCESS_CAMERA = NO;
+				ENABLE_RESOURCE_ACCESS_CONTACTS = NO;
+				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
+				ENABLE_RESOURCE_ACCESS_PRINTING = NO;
+				ENABLE_RESOURCE_ACCESS_USB = NO;
 				ENABLE_USER_SELECTED_FILES = readonly;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";

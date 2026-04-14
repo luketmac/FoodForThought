@@ -1,7 +1,6 @@
 import Foundation
 import SwiftData
 
-// 1. The SwiftData Database Model (What you save to the Mac)
 @Model
 class SavedRecipe {
     @Attribute(.unique) var id: String // Ensures we don't save duplicates
@@ -19,7 +18,6 @@ class SavedRecipe {
     }
 }
 
-// 2. The Network Model (What comes from the API)
 struct MealResponse: Codable {
     let meals: [RecipeDTO]?
 }

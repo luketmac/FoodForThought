@@ -1,11 +1,3 @@
-//
-//  MainContentView.swift
-//  FoodForThought
-//
-//  Created by Luke Macintosh on 4/14/26.
-//
-
-
 import SwiftUI
 import SwiftData
 
