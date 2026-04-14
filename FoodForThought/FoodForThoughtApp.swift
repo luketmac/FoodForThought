@@ -1,17 +1,13 @@
-//
-//  FoodForThoughtApp.swift
-//  FoodForThought
-//
-//  Created by Luke Macintosh on 4/14/26.
-//
-
 import SwiftUI
+import SwiftData
 
 @main
-struct FoodForThoughtApp: App {
+struct FoodForThoughtApp: App { // Replace 'FoodForThoughtApp' with your actual app name
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MainContentView()
         }
+        // This single line creates the local database and makes it available to all views!
+        .modelContainer(for: SavedRecipe.self) 
     }
 }
