@@ -15,14 +15,15 @@ struct MainContentView: View {
         NavigationStack {
             VStack {
                 if selectedTab == "Discover" {
-                    Text("Discover Page Content Goes Here")
+                    DiscoverView(viewModel: discoverVM)
                         .task {
                             // Load recipes when the app opens
                             if discoverVM.discoverRecipes.isEmpty {
                                 await discoverVM.loadInitialRecipes()
                             }
                         }
-                } else {
+                }
+                else {
                     Text("Favorites Page Content Goes Here")
                 }
             }
@@ -40,6 +41,18 @@ struct MainContentView: View {
                     TextField("Discover More...", text: $searchText)
                         .textFieldStyle(.roundedBorder)
                         .frame(width: 200)
+                        .padding(5)
+                }
+                
+                ToolbarItem(placement: .primaryAction) {
+                    Button(action: {
+                        Task {
+                            await discoverVM.loadInitialRecipes()
+                        }
+                    }) {
+                        Image(systemName: "arrow.clockwise")
+                            .padding()
+                    }
                 }
             }
         }

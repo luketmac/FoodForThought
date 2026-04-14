@@ -2,21 +2,20 @@ import SwiftUI
 
 struct RecipeCardView: View {
     let recipe: RecipeDTO
-    let onSave: () -> Void // Action to run when the star is clicked
+    let onSave: () -> Void
     
-    // We assume it's not saved for this simple visual, 
-    // but you can pass real saved state here later.
-    @State private var isSaved: Bool = false 
+    @State private var isSaved: Bool = false
 
     var body: some View {
-        ZStack(alignment: .bottomTrailing) {
-            // 1. The Background Image
+        Group {
+            // The Background Image
             if let imageUrlString = recipe.strMealThumb, let url = URL(string: imageUrlString) {
                 AsyncImage(url: url) { phase in
                     switch phase {
                     case .empty:
                         ProgressView()
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .background(Color.gray.opacity(0.2))
                     case .success(let image):
                         image
                             .resizable()
@@ -24,29 +23,36 @@ struct RecipeCardView: View {
                     case .failure:
                         Image(systemName: "photo")
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .background(Color.gray.opacity(0.2))
                     @unknown default:
                         EmptyView()
                     }
                 }
+            } else {
+                Color.gray.opacity(0.2)
             }
-            
-            // 2. A dark gradient to make the white text readable
-            LinearGradient(
-                gradient: Gradient(colors: [.clear, .black.opacity(0.8)]),
-                startPoint: .center,
-                endPoint: .bottom
-            )
-            
-            // 3. The Title Text
+        }
+        .frame(height: 200)
+        .frame(maxWidth: .infinity)
+        
+        // Dark Overlay
+        .overlay(Color.black.opacity(0.3))
+        
+        // Centered Title Text
+        .overlay(alignment: .center) {
             Text(recipe.strMeal)
-                .font(.title3)
+                .font(.title2)
                 .fontWeight(.bold)
                 .foregroundColor(.white)
                 .multilineTextAlignment(.center)
-                .padding()
-                .frame(maxWidth: .infinity, alignment: .center)
-            
-            // 4. The Favorite Star Button
+                .lineLimit(2)
+                .minimumScaleFactor(0.7)
+                .padding(.horizontal, 16)
+                .shadow(color: .black.opacity(0.8), radius: 4, x: 0, y: 2)
+        }
+        
+        // Pinned Favorite Button
+        .overlay(alignment: .bottomTrailing) {
             Button(action: {
                 isSaved.toggle()
                 onSave()
@@ -57,10 +63,11 @@ struct RecipeCardView: View {
                     .foregroundColor(isSaved ? .yellow : .white)
                     .background(Circle().fill(.black.opacity(0.5)))
             }
-            .buttonStyle(.plain) // Prevents the whole card from acting like a button on Mac
-            .padding(8)
+            .buttonStyle(.plain)
+            .padding(12)
         }
-        .frame(height: 200)
+        
+        // Applies the rounded corners and shadow to the final composed shape
         .clipShape(RoundedRectangle(cornerRadius: 16))
         .shadow(radius: 5)
     }
