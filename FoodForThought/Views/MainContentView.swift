@@ -7,6 +7,7 @@ struct MainContentView: View {
     
     // The view model for the discover page
     @State private var discoverVM = DiscoverViewModel()
+    @State private var favoritesVM: FavoritesViewModel?
     
     @State private var selectedTab = "Discover"
     @State private var searchText = ""
@@ -15,16 +16,20 @@ struct MainContentView: View {
         NavigationStack {
             VStack {
                 if selectedTab == "Discover" {
-                    DiscoverView(viewModel: discoverVM)
-                        .task {
-                            // Load recipes when the app opens
-                            if discoverVM.discoverRecipes.isEmpty {
-                                await discoverVM.loadInitialRecipes()
+                    if let favoritesVM = favoritesVM {
+                        DiscoverView(viewModel: discoverVM, favoritesViewModel: favoritesVM)
+                            .task {
+                                // Load recipes when the app opens
+                                if discoverVM.discoverRecipes.isEmpty {
+                                    await discoverVM.loadInitialRecipes()
+                                }
                             }
-                        }
+                    }
                 }
-                else {
-                    Text("Favorites Page Content Goes Here")
+                if selectedTab == "Favorites" {
+                    if let favoritesVM = favoritesVM {
+                        FavoritesView(viewModel: favoritesVM)
+                    }
                 }
             }
             .navigationTitle(selectedTab == "Discover" ? "Discover Something Tasty" : "Your Favorites")
@@ -53,6 +58,11 @@ struct MainContentView: View {
                         Image(systemName: "arrow.clockwise")
                             .padding()
                     }
+                }
+            }
+            .onAppear {
+                if favoritesVM == nil {
+                    favoritesVM = FavoritesViewModel(modelContext: modelContext)
                 }
             }
         }

@@ -4,7 +4,6 @@ import Observation
 @Observable
 class DiscoverViewModel {
     var discoverRecipes: [RecipeDTO] = []
-    var favoriteRecipes: [RecipeDTO] = []
     var isLoading: Bool = false
     
     
@@ -15,23 +14,24 @@ class DiscoverViewModel {
         isLoading = true
         discoverRecipes.removeAll()
         
+        var seenIds = Set<String>()
+        var recipesToLoad = 6
+        var attempts = 0
+        let maxAttempts = 20 // Prevent infinite loops
+        
         // TheMealDB only returns 1 random recipe at a time, so we loop it
-        for _ in 1...6 {
+        while recipesToLoad > 0 && attempts < maxAttempts {
             if let recipe = try? await networkService.fetchRandomRecipe() {
-                discoverRecipes.append(recipe)
+                // Only add if we haven't seen this recipe before
+                if !seenIds.contains(recipe.idMeal) {
+                    seenIds.insert(recipe.idMeal)
+                    discoverRecipes.append(recipe)
+                    recipesToLoad -= 1
+                }
             }
+            attempts += 1
         }
         
         isLoading = false
-    }
-    
-    func saveToFavorites(recipe: RecipeDTO) {
-        favoriteRecipes.append(recipe)
-    }
-    
-    func removeFromFavorites(recipe: RecipeDTO) {
-        if let index = favoriteRecipes.firstIndex(where: { $0.idMeal == recipe.idMeal }) {
-            favoriteRecipes.remove(at: index)
-        }
     }
 }

@@ -2,10 +2,11 @@ import SwiftUI
 
 struct RecipeCardView: View {
     let recipe: RecipeDTO
+    let isFavorited: Bool
     let onSave: () -> Void
     
     @State private var isSaved: Bool = false
-
+    
     var body: some View {
         Group {
             // The Background Image
@@ -52,20 +53,24 @@ struct RecipeCardView: View {
         }
         
         // Pinned Favorite Button
-        .overlay(alignment: .bottomTrailing) {
-            Button(action: {
-                isSaved.toggle()
-                onSave()
-            }) {
-                Image(systemName: isSaved ? "star.circle.fill" : "star.circle")
-                    .resizable()
-                    .frame(width: 24, height: 24)
-                    .foregroundColor(isSaved ? .yellow : .white)
-                    .background(Circle().fill(.black.opacity(0.5)))
-            }
-            .buttonStyle(.plain)
-            .padding(12)
-        }
+        // Pinned Favorite Button
+         .overlay(alignment: .bottomTrailing) {
+             Button(action: {
+                 isSaved.toggle()
+                 onSave()
+             }) {
+                 Image(systemName: isSaved ? "star.circle.fill" : "star.circle")
+                     .resizable()
+                     .frame(width: 24, height: 24)
+                     .foregroundColor(isSaved ? .yellow : .white)
+                     .background(Circle().fill(.black.opacity(0.5)))
+             }
+             .buttonStyle(.plain)
+             .padding(12)
+         }
+         .onAppear {
+             isSaved = isFavorited
+         }
         
         // Applies the rounded corners and shadow to the final composed shape
         .clipShape(RoundedRectangle(cornerRadius: 16))
