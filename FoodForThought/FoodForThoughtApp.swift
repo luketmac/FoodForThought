@@ -7,6 +7,6 @@ struct FoodForThoughtApp: App {
         WindowGroup {
             MainContentView()
         }
-        .modelContainer(for: SavedRecipe.self) 
+        .modelContainer(for: FavoriteRecipe.self) 
     }
 }

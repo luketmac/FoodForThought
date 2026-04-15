@@ -18,8 +18,13 @@ struct DiscoverView: View {
                 LazyVGrid(columns: columns, spacing: 20) {
                     ForEach(viewModel.discoverRecipes) { recipe in
                         RecipeCardView(recipe: recipe) {
-                            // TODO: Add SwiftData save logic here later
+                            if !viewModel.favoriteRecipes.contains(where: { $0.idMeal == recipe.idMeal }) {
+                                viewModel.saveToFavorites(recipe: recipe)
+                            } else {
+                                viewModel.removeFromFavorites(recipe: recipe)
+                            }
                             print("Clicked save for \(recipe.strMeal)")
+                            print("Current favorites: \(viewModel.favoriteRecipes.map { $0.strMeal })")
                         }
                     }
                 }

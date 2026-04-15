@@ -2,7 +2,7 @@ import Foundation
 import SwiftData
 
 @Model
-class SavedRecipe {
+class FavoriteRecipe {
     @Attribute(.unique) var id: String // Ensures we don't save duplicates
     var name: String
     var category: String
@@ -32,8 +32,8 @@ struct RecipeDTO: Codable, Identifiable {
     var id: String { idMeal }
     
     // A helper to easily convert network data into a saved database object
-    func toSavedRecipe() -> SavedRecipe {
-        SavedRecipe(
+    func toFavoriteRecipe() -> FavoriteRecipe {
+        FavoriteRecipe(
             id: self.idMeal,
             name: self.strMeal,
             category: self.strCategory ?? "Unknown",
