@@ -1,15 +1,17 @@
 import SwiftUI
 
+/// A view representing a card for a recipe, displaying its image and favorite button.
 struct RecipeCardView: View {
+    /// The recipe to display.
     let recipe: RecipeDTO
+    /// Indicates if the recipe is favorited.
     let isFavorited: Bool
+    /// The action to perform when the favorite button is tapped.
     let onSave: () -> Void
-    
-    @State private var isSaved: Bool = false
-    
+
+    /// The body of the view.
     var body: some View {
         Group {
-            // The Background Image
             if let imageUrlString = recipe.strMealThumb, let url = URL(string: imageUrlString) {
                 AsyncImage(url: url) { phase in
                     switch phase {
@@ -36,10 +38,8 @@ struct RecipeCardView: View {
         .frame(height: 200)
         .frame(maxWidth: .infinity)
         
-        // Dark Overlay
         .overlay(Color.black.opacity(0.3))
         
-        // Centered Title Text
         .overlay(alignment: .center) {
             Text(recipe.strMeal)
                 .font(.title2)
@@ -52,27 +52,19 @@ struct RecipeCardView: View {
                 .shadow(color: .black.opacity(0.8), radius: 4, x: 0, y: 2)
         }
         
-        // Pinned Favorite Button
-        // Pinned Favorite Button
-         .overlay(alignment: .bottomTrailing) {
-             Button(action: {
-                 isSaved.toggle()
-                 onSave()
-             }) {
-                 Image(systemName: isSaved ? "star.circle.fill" : "star.circle")
-                     .resizable()
-                     .frame(width: 24, height: 24)
-                     .foregroundColor(isSaved ? .yellow : .white)
-                     .background(Circle().fill(.black.opacity(0.5)))
-             }
-             .buttonStyle(.plain)
-             .padding(12)
-         }
-         .onAppear {
-             isSaved = isFavorited
-         }
-        
-        // Applies the rounded corners and shadow to the final composed shape
+        .overlay(alignment: .bottomTrailing) {
+            Button(action: {
+                onSave()
+            }) {
+                Image(systemName: isFavorited ? "star.circle.fill" : "star.circle")
+                    .resizable()
+                    .frame(width: 24, height: 24)
+                    .foregroundColor(isFavorited ? .yellow : .white)
+                    .background(Circle().fill(.black.opacity(0.5)))
+            }
+            .buttonStyle(.plain)
+            .padding(12)
+        }
         .clipShape(RoundedRectangle(cornerRadius: 16))
         .shadow(radius: 5)
     }

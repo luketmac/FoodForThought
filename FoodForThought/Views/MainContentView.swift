@@ -1,17 +1,22 @@
 import SwiftUI
 import SwiftData
 
+/// The main content view of the application, handling tab navigation between discover and favorites.
 struct MainContentView: View {
-    // Gives us access to the SwiftData database
+    /// The environment model context for SwiftData.
     @Environment(\.modelContext) private var modelContext
     
-    // The view model for the discover page
+    /// The view model for discover functionality.
     @State private var discoverVM = DiscoverViewModel()
+    /// The view model for favorites.
     @State private var favoritesVM: FavoritesViewModel?
     
+    /// The selected tab.
     @State private var selectedTab = "Discover"
+    /// The search text.
     @State private var searchText = ""
 
+    /// The body of the view.
     var body: some View {
         NavigationStack {
             VStack {
@@ -19,7 +24,6 @@ struct MainContentView: View {
                     if let favoritesVM = favoritesVM {
                         DiscoverView(viewModel: discoverVM, favoritesViewModel: favoritesVM)
                             .task {
-                                // Load recipes when the app opens
                                 if discoverVM.discoverRecipes.isEmpty {
                                     await discoverVM.loadInitialRecipes()
                                 }

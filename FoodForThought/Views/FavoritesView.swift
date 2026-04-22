@@ -1,20 +1,26 @@
 import SwiftUI
 import UniformTypeIdentifiers
 
+/// A view for displaying and managing favorite recipes.
 struct FavoritesView: View {
-    // We pass the ViewModel in from the main window
+    /// The view model for favorites.
     var viewModel: FavoritesViewModel
     
-    // Defines a grid that auto-adjusts columns based on window size
+    /// The grid layout for the recipes.
     let columns = [
         GridItem(.adaptive(minimum: 250, maximum: 300), spacing: 20)
     ]
     
+    /// State for showing the file picker.
     @State private var showingFilePicker = false
+    /// State for showing the file exporter.
     @State private var showingFileExporter = false
+    /// The data to export.
     @State private var exportData: Data?
+    /// The import message to display.
     @State private var importMessage = ""
     
+    /// The body of the view.
     var body: some View {
         NavigationStack {
             ScrollView {
@@ -34,9 +40,12 @@ struct FavoritesView: View {
                 } else {
                     LazyVGrid(columns: columns, spacing: 20) {
                         ForEach(viewModel.favoriteRecipes) { recipe in
-                            RecipeCardView(recipe: recipe, isFavorited: true) {
-                                viewModel.removeFromFavorites(recipe: recipe)
+                            NavigationLink(destination: RecipeDetailView(recipe: recipe, favoritesViewModel: viewModel)) {
+                                RecipeCardView(recipe: recipe, isFavorited: true) {
+                                    viewModel.removeFromFavorites(recipe: recipe)
+                                }
                             }
+                            .buttonStyle(.plain)
                         }
                     }
                     .padding()
@@ -86,6 +95,7 @@ struct FavoritesView: View {
         }
     }
     
+    /// Exports the favorites.
     private func exportFavorites() {
         if let jsonData = viewModel.exportFavoritesAsJSON() {
             exportData = jsonData
@@ -93,10 +103,11 @@ struct FavoritesView: View {
         }
     }
     
+    /// Handles the file import result.
+    /// - Parameter result: The result of the file import.
     private func handleFileImport(result: Result<URL, Error>) {
         switch result {
         case .success(let url):
-            // Start accessing the security-scoped resource
             let fileAccessGranted = url.startAccessingSecurityScopedResource()
             defer {
                 if fileAccessGranted {
@@ -119,6 +130,8 @@ struct FavoritesView: View {
         }
     }
     
+    /// Handles the file export result.
+    /// - Parameter result: The result of the file export.
     private func handleFileExport(result: Result<URL, Error>) {
         switch result {
         case .success(_):
@@ -128,10 +141,10 @@ struct FavoritesView: View {
         }
     }
     
+    /// Generates a date string for the filename.
     private func dateString() -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd_HHmmss"
         return formatter.string(from: Date())
     }
 }
-

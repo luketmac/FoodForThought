@@ -1,9 +1,13 @@
 import Foundation
 
+/// A service class for interacting with the MealDB API.
 class MealDBNetworkService {
-    // TheMealDB random endpoint
+    /// The URL for fetching a random recipe from TheMealDB.
     private let randomURL = URL(string: "https://www.themealdb.com/api/json/v1/1/random.php")!
     
+    /// Fetches a random recipe from the MealDB API.
+    /// - Returns: A RecipeDTO if successful, nil otherwise.
+    /// - Throws: An error if the network request fails.
     func fetchRandomRecipe() async throws -> RecipeDTO? {
         let (data, response) = try await URLSession.shared.data(from: randomURL)
         

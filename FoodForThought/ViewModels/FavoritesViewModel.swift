@@ -2,22 +2,27 @@ import Foundation
 import Observation
 import SwiftData
 
+/// A view model for managing favorite recipes, including database operations and export/import functionality.
 @Observable
 class FavoritesViewModel {
+    /// The list of favorite recipes.
     var favoriteRecipes: [RecipeDTO] = []
+    /// Indicates whether the view model is currently loading.
     var isLoading: Bool = false
     
+    /// The network service for fetching recipes.
     private let networkService = MealDBNetworkService()
+    /// The model context for database operations.
     private var modelContext: ModelContext?
     
+    /// Initializes the view model with an optional model context.
+    /// - Parameter modelContext: The SwiftData model context.
     init(modelContext: ModelContext? = nil) {
         self.modelContext = modelContext
         loadFavoritesFromDatabase()
     }
     
-    // MARK: - Database Operations
-    
-    /// Loads favorites from SwiftData database
+    /// Loads favorites from the SwiftData database.
     private func loadFavoritesFromDatabase() {
         guard let modelContext = modelContext else { return }
         
@@ -25,14 +30,24 @@ class FavoritesViewModel {
             let descriptor = FetchDescriptor<FavoriteRecipe>()
             let savedRecipes = try modelContext.fetch(descriptor)
             
-            // Convert FavoriteRecipe objects to RecipeDTO
             favoriteRecipes = savedRecipes.map { saved in
-                RecipeDTO(
+                let parsedIngredients = saved.savedIngredients.map { item -> RecipeIngredient in
+                    let components = item.components(separatedBy: " | ")
+                    if components.count == 2 {
+                        return RecipeIngredient(ingredient: components[1], measure: components[0])
+                    }
+                    return RecipeIngredient(ingredient: item, measure: "")
+                }
+                
+                return RecipeDTO(
                     idMeal: saved.id,
                     strMeal: saved.name,
                     strCategory: saved.category,
+                    strArea: saved.area,
                     strInstructions: saved.instructions,
-                    strMealThumb: saved.imageURL
+                    strMealThumb: saved.imageURL,
+                    strYoutube: saved.youtubeURL,
+                    loadedDatabaseIngredients: parsedIngredients
                 )
             }
         } catch {
@@ -40,14 +55,13 @@ class FavoritesViewModel {
         }
     }
     
-    /// Saves a recipe to both memory and database
+    /// Saves a recipe to both memory and database.
+    /// - Parameter recipe: The recipe to save.
     func saveToFavorites(recipe: RecipeDTO) {
-        // Add to in-memory array
         if !favoriteRecipes.contains(where: { $0.idMeal == recipe.idMeal }) {
             favoriteRecipes.append(recipe)
         }
         
-        // Save to database
         guard let modelContext = modelContext else { return }
         
         let favoriteRecipe = recipe.toFavoriteRecipe()
@@ -60,14 +74,13 @@ class FavoritesViewModel {
         }
     }
     
-    /// Removes a recipe from both memory and database
+    /// Removes a recipe from both memory and database.
+    /// - Parameter recipe: The recipe to remove.
     func removeFromFavorites(recipe: RecipeDTO) {
-        // Remove from in-memory array
         if let index = favoriteRecipes.firstIndex(where: { $0.idMeal == recipe.idMeal }) {
             favoriteRecipes.remove(at: index)
         }
         
-        // Remove from database
         guard let modelContext = modelContext else { return }
         
         do {
@@ -84,9 +97,8 @@ class FavoritesViewModel {
         }
     }
     
-    // MARK: - Export/Import Functionality
-    
-    /// Exports favorites as JSON data
+    /// Exports favorites as JSON data.
+    /// - Returns: The JSON data if successful, nil otherwise.
     func exportFavoritesAsJSON() -> Data? {
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
@@ -100,13 +112,13 @@ class FavoritesViewModel {
         }
     }
     
-    /// Exports favorites to a JSON file and returns the file URL
+    /// Exports favorites to a JSON file and returns the file URL.
+    /// - Returns: The URL of the exported file if successful, nil otherwise.
     func exportFavoritesToFile() -> URL? {
         guard let jsonData = exportFavoritesAsJSON() else { return nil }
         
         let fileName = "RecipeFavorites_\(dateString()).json"
         
-        // Try to save to Documents directory first, fall back to temp
         if let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
             let fileURL = documentsURL.appendingPathComponent(fileName)
             do {
@@ -117,7 +129,6 @@ class FavoritesViewModel {
             }
         }
         
-        // Fallback to temporary directory
         let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
         do {
             try jsonData.write(to: tempURL)
@@ -128,14 +139,15 @@ class FavoritesViewModel {
         }
     }
     
-    /// Imports favorites from JSON data
+    /// Imports favorites from JSON data.
+    /// - Parameter data: The JSON data to import.
+    /// - Returns: True if import was successful, false otherwise.
     func importFavoritesFromJSON(_ data: Data) -> Bool {
         let decoder = JSONDecoder()
         
         do {
             let importedRecipes = try decoder.decode([RecipeDTO].self, from: data)
             
-            // Add imported recipes, avoiding duplicates
             for recipe in importedRecipes {
                 if !favoriteRecipes.contains(where: { $0.idMeal == recipe.idMeal }) {
                     saveToFavorites(recipe: recipe)
@@ -149,12 +161,11 @@ class FavoritesViewModel {
         }
     }
     
-    /// Helper to generate a timestamp string for filenames
+    /// Generates a timestamp string for filenames.
+    /// - Returns: A formatted date string.
     private func dateString() -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd_HHmmss"
         return formatter.string(from: Date())
     }
 }
-
-

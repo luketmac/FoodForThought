@@ -1,15 +1,18 @@
 import SwiftUI
 
+/// A view for displaying the discover recipes in a grid.
 struct DiscoverView: View {
-    // We pass the ViewModel in from the main window
+    /// The view model for discover functionality.
     var viewModel: DiscoverViewModel
+    /// The view model for favorites.
     var favoritesViewModel: FavoritesViewModel
     
-    // Defines a grid that auto-adjusts columns based on window size
+    /// The grid layout for the recipes.
     let columns = [
         GridItem(.adaptive(minimum: 250, maximum: 300), spacing: 20)
     ]
 
+    /// The body of the view.
     var body: some View {
         ScrollView {
             if viewModel.isLoading {
@@ -18,15 +21,18 @@ struct DiscoverView: View {
             } else {
                 LazyVGrid(columns: columns, spacing: 20) {
                     ForEach(viewModel.discoverRecipes) { recipe in
-                        RecipeCardView(recipe: recipe, isFavorited: favoritesViewModel.favoriteRecipes.contains(where: { $0.idMeal == recipe.idMeal })) {
-                            if !favoritesViewModel.favoriteRecipes.contains(where: { $0.idMeal == recipe.idMeal }) {
-                                favoritesViewModel.saveToFavorites(recipe: recipe)
-                            } else {
-                                favoritesViewModel.removeFromFavorites(recipe: recipe)
+                        let isFav = favoritesViewModel.favoriteRecipes.contains(where: { $0.idMeal == recipe.idMeal })
+                        
+                        NavigationLink(destination: RecipeDetailView(recipe: recipe, favoritesViewModel: favoritesViewModel)) {
+                            RecipeCardView(recipe: recipe, isFavorited: isFav) {
+                                if isFav {
+                                    favoritesViewModel.removeFromFavorites(recipe: recipe)
+                                } else {
+                                    favoritesViewModel.saveToFavorites(recipe: recipe)
+                                }
                             }
-                            print("Clicked save for \(recipe.strMeal)")
-                            print("Current favorites: \(favoritesViewModel.favoriteRecipes.map { $0.strMeal })")
                         }
+                        .buttonStyle(.plain)
                     }
                 }
                 .padding()

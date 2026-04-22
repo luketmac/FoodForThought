@@ -1,15 +1,19 @@
 import Foundation
 import Observation
 
+/// A view model for managing the discover recipes functionality.
 @Observable
 class DiscoverViewModel {
+    /// The list of discovered recipes.
     var discoverRecipes: [RecipeDTO] = []
+    /// Indicates whether the view model is currently loading recipes.
     var isLoading: Bool = false
     
     
+    /// The network service for fetching recipes.
     private let networkService = MealDBNetworkService()
     
-    // Fetches 6 random recipes for the discover grid
+    /// Loads initial recipes for the discover grid by fetching random recipes.
     func loadInitialRecipes() async {
         isLoading = true
         discoverRecipes.removeAll()
@@ -17,12 +21,10 @@ class DiscoverViewModel {
         var seenIds = Set<String>()
         var recipesToLoad = 6
         var attempts = 0
-        let maxAttempts = 20 // Prevent infinite loops
+        let maxAttempts = 20
         
-        // TheMealDB only returns 1 random recipe at a time, so we loop it
         while recipesToLoad > 0 && attempts < maxAttempts {
             if let recipe = try? await networkService.fetchRandomRecipe() {
-                // Only add if we haven't seen this recipe before
                 if !seenIds.contains(recipe.idMeal) {
                     seenIds.insert(recipe.idMeal)
                     discoverRecipes.append(recipe)
