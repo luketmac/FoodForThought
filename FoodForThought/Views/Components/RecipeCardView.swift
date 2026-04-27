@@ -22,7 +22,8 @@ struct RecipeCardView: View {
                     case .success(let image):
                         image
                             .resizable()
-                            .aspectRatio(contentMode: .fill)
+                            .aspectRatio(4/3, contentMode: .fill)
+                            .clipped()
                     case .failure:
                         Image(systemName: "photo")
                             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -58,7 +59,7 @@ struct RecipeCardView: View {
             }) {
                 Image(systemName: isFavorited ? "star.circle.fill" : "star.circle")
                     .resizable()
-                    .frame(width: 24, height: 24)
+                    .frame(width: 24, height: 24, )
                     .foregroundColor(isFavorited ? .yellow : .white)
                     .background(Circle().fill(.black.opacity(0.5)))
             }
